@@ -58,3 +58,19 @@ __END__
 @@ -155 +155 @@
 -  set(RUBY_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/ruby/site_ruby/${RUBY_VERSION_MAJOR}.${RUBY_VERSION_MINOR}/${RUBY_PLATFORM})
 +  string(REPLACE ${RUBY_POSSIBLE_LIB_DIR} ${CMAKE_INSTALL_LIBDIR} RUBY_PACKAGE_INSTALL_DIR ${RUBY_SITEARCH_DIR})
+diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
+index 3a59bf5..aa0a733 100644
+--- a/src/bindings/python/CMakeLists.txt
++++ b/src/bindings/python/CMakeLists.txt
+@@ -207,9 +207,8 @@ target_link_libraries(binding_python_lib ${LIBSBML_LIBRARY}-static ${PYTHON_LIBR
+ #
+ set(PYTHON_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN) 
+-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sys;import platform; sys.stdout.write(platform.python_version()[:3])"
+-    OUTPUT_VARIABLE PYTHON_VERSION)
+-  set(PYTHON_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION}/site-packages)
++    execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sys;from distutils.sysconfig import get_python_lib; sys.stdout.write(get_python_lib())"
++      OUTPUT_VARIABLE PYTHON_PACKAGE_INSTALL_DIR)
+ else()
+   set(PYTHON_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/python)
+ endif()
